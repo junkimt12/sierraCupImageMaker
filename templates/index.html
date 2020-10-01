@@ -1,0 +1,133 @@
+{% extends "layout.html" %} {% block content %}
+
+<form action="/reset" enctype="multipart/form-data">
+  <button type="submit">RESET</button>
+</form>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <input type="file" name="image" accept="image/png, image/jpeg" />
+  <button type="submit">submit</button>
+</form>
+
+<br />
+
+<form action="/upload" method="get">
+  <input type="hidden" name="binarySlider" id="from-binary-slider" />
+  <input type="hidden" name="expansionSlider" id="from-expansion-slider" />
+  <input type="hidden" name="cxSlider" id="from-cx-slider" />
+  <input type="hidden" name="cySlider" id="from-cy-slider" />
+  <button type="submit">変換</button>
+</form>
+
+<!-- binarize -->
+<input
+  type="range"
+  id="binary-slider"
+  min="0"
+  max="255"
+  step="1"
+  value="{{ binary_thr }}"
+  name="binarySlider"
+/>
+<p>二値化の閾値：<span id="binary-slider-value"></span>です</p>
+
+<!-- expansion -->
+<input
+  type="range"
+  id="expansion-slider"
+  min="0.1"
+  max="5.0"
+  step="0.1"
+  value="{{ expansion }}"
+  name="expansionSlider"
+/>
+<p>拡大率：<span id="expansion-slider-value"></span>です</p>
+
+<!-- cx -->
+<input
+  type="range"
+  id="cx-slider"
+  min="1000"
+  max="3000"
+  step="10"
+  value="{{ cx }}"
+  name="cxSlider"
+/>
+<p>横の位置：<span id="cx-slider-value"></span>です</p>
+
+<!-- cy -->
+<input
+  type="range"
+  id="cy-slider"
+  min="1000"
+  max="3000"
+  step="10"
+  value="{{ cy }}"
+  name="cySlider"
+/>
+<p>縦の位置：<span id="cy-slider-value"></span>です</p>
+
+<script>
+  // binarize
+  const inputElem1 = document.getElementById("expansion-slider"); // input要素
+
+  const setCurrentValue1 = (val) => {
+    document.getElementById("expansion-slider-value").innerText = val;
+    document.getElementById("from-expansion-slider").value = val;
+  };
+
+  const rangeOnChange1 = (e) => {
+    setCurrentValue1(e.target.value);
+  };
+
+  // expansion
+  const inputElem2 = document.getElementById("binary-slider"); // input要素
+
+  const setCurrentValue2 = (val) => {
+    document.getElementById("binary-slider-value").innerText = val;
+    document.getElementById("from-binary-slider").value = val;
+  };
+
+  const rangeOnChange2 = (e) => {
+    setCurrentValue2(e.target.value);
+  };
+
+  // cx
+  const inputElem3 = document.getElementById("cx-slider"); // input要素
+
+  const setCurrentValue3 = (val) => {
+    document.getElementById("cx-slider-value").innerText = val;
+    document.getElementById("from-cx-slider").value = val;
+  };
+
+  const rangeOnChange3 = (e) => {
+    setCurrentValue3(e.target.value);
+  };
+
+  // cy
+  const inputElem4 = document.getElementById("cy-slider"); // input要素
+
+  const setCurrentValue4 = (val) => {
+    document.getElementById("cy-slider-value").innerText = val;
+    document.getElementById("from-cy-slider").value = val;
+  };
+
+  const rangeOnChange4 = (e) => {
+    setCurrentValue4(e.target.value);
+  };
+
+  window.onload = () => {
+    inputElem1.addEventListener("input", rangeOnChange1);
+    setCurrentValue1(inputElem1.value);
+    inputElem2.addEventListener("input", rangeOnChange2);
+    setCurrentValue2(inputElem2.value);
+    inputElem3.addEventListener("input", rangeOnChange3);
+    setCurrentValue3(inputElem3.value);
+    inputElem4.addEventListener("input", rangeOnChange4);
+    setCurrentValue4(inputElem4.value);
+  };
+</script>
+
+<img src="{{qr_b64data}}" alt="result" />
+<img src="{{input_b64data}}" alt="result" />
+{% endblock %}
